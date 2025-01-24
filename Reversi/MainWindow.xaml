@@ -1,0 +1,66 @@
+﻿<Window x:Class="Reversi.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Reversi"
+        mc:Ignorable="d"
+        Title="Reversi" Height="450" Width="575" Background="PaleGreen" MinWidth="575" MinHeight="450" Icon="/reversiico.ico" WindowStyle="ThreeDBorderWindow">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Background="LightSeaGreen">
+            <MenuItem Header="Gra">
+                <MenuItem Header="Nowa gra - Rozpoczyna komputer (brązowy)"
+                        Click="MenuItem_NowaGraDla1Gracza_RozpoczynaKomputer_Click" />
+                <MenuItem Header="Nowa gra - Rozpoczynasz ty (zielony)"
+                        Click="MenuItem_NowaGraDla1Gracza_Click" />
+                <MenuItem Header="Nowa gra dla dwóch graczy"
+                        Click="MenuItem_NowaGraDla2Graczy_Click" />
+                <Separator />
+                <MenuItem Header="Zamknij" Click="MenuItem_Zamknij_Click" />
+            </MenuItem>
+            <MenuItem Header="Pomoc">
+                <MenuItem Header="Pokaż podpowiedź ruchu"
+                              Click="MenuItem_PodpowiedźRuchu_Click" />
+                <MenuItem Header="Pokaż ruch wykonany przez przeciwnika"
+                              Click="MenuItem_RuchWykonanyPrzezPrzeciwnika_Click" />
+                <Separator />
+                <MenuItem Header="Zasady gry"
+                              Click="MenuItem_ZasadyGry_Click" />
+                <MenuItem Header="Strategia komputera"
+                              Click="MenuItem_StrategiaKomputera_Click" />
+                <Separator />
+                <MenuItem Header="O programie"
+                              Click="MenuItem_Informacje_Click" />
+            </MenuItem>
+        </Menu>
+        <Grid Background="#DDFFDD">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="planszaSiatka" Grid.Column="0" Margin="10">
+            </Grid>
+            <Grid x:Name="panel" Grid.Column="1" Margin="0,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Button x:Name="przyciskKolorGracza" Margin="10" Width="40" Height="40" Grid.Row="0" 
+                            Click="przyciskKolorGracza_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{DynamicResource ButtonStyle}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" Foreground="Green"
+                            Text="Zielony: " FontWeight="Bold"><Run x:Name="liczbaPólZielony" Text="0" /></TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" Foreground="Sienna"
+                            Text="Brązowy: " FontWeight="Bold"><Run x:Name="liczbaPólBrązowy" Text="0" /></TextBlock>
+                <ListBox x:Name="listaRuchówZielony" Grid.Column="0" Grid.Row="2"
+                            Margin="5,0,10,10" />
+                <ListBox x:Name="listaRuchówBrązowy" Grid.Column="1" Grid.Row="2"
+                            Margin="5,0,10,10" />
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
