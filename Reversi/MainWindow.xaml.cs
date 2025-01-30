@@ -91,7 +91,7 @@ namespace Reversi
             switch (sytuacjaNaPlanszy)
             {
                 case ReversiSilnik.SytuacjaNaPlanszy.BieżącyGraczNieMożeWykonaćRuchu:
-                    MessageBox.Show("Gracz " + nazwyGraczy[silnik.NumerGraczaWykonującegoNastępnyRuch] + " zmuszony jest do oddania ruchu");
+                    MessageBox.Show("Aktywny gracz nie może oddać ruchu w tej turze.");
                     silnik.Pasuj();
                     uzgodnijZawartośćPlanszy();
                     break;
