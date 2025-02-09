@@ -25,13 +25,9 @@ namespace Reversi
         bool graPrzeciwkoKomputerowi = true;
         // Timer do opóźnienia ruchu komputera
         private DispatcherTimer timer;
-
         // Przypisanie kolorów do graczy
-        static private SolidColorBrush kolorPierwszy = Brushes.RoyalBlue;
-        static private SolidColorBrush kolorDrugi = Brushes.Plum;
-
-        private SolidColorBrush[] kolory = { Brushes.Snow, kolorPierwszy, kolorDrugi };
-        string[] nazwyGraczy = { "", "Pierwszy", "Drugi" };
+        private SolidColorBrush[] kolory = { Brushes.Ivory, Brushes.Green, Brushes.Sienna };
+        string[] nazwyGraczy = { "", "zielony", "brązowy" };
         // Pola na planszy
         private Button[,] plansza;
         private bool planszaZainicjowana
@@ -49,8 +45,6 @@ namespace Reversi
                     plansza[i, j].Content = silnik.PobierzStanPola(i, j).ToString();
                 }
             przyciskKolorGracza.Background = kolory[silnik.NumerGraczaWykonującegoNastępnyRuch];
-            napisPierwszy.Background = kolorPierwszy;
-            napisDrugi.Background = kolorDrugi;
             liczbaPólZielony.Text = silnik.LiczbaPólGracz1.ToString();
             liczbaPólBrązowy.Text = silnik.LiczbaPólGracz2.ToString();
         }
@@ -61,9 +55,9 @@ namespace Reversi
         WspółrzędnePola OstatniRuch;
         private static string symbolPola(int poziomo, int pionowo)
         {
-            if (poziomo > 8 || pionowo > 8)
+            if (poziomo > 25 || pionowo > 8)
                 return "(" + poziomo.ToString() + "," + pionowo.ToString() + ")";
-            return "{" + "123456789"[poziomo] + ", " +"123456789"[pionowo] + "}";
+            return "" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[poziomo] + "123456789"[pionowo];
         }
         void kliknięciePolaPlanszy(object sender, RoutedEventArgs e)
         {
@@ -235,7 +229,7 @@ namespace Reversi
         private void MenuItem_NowaGraDla1Gracza_RozpoczynaKomputer_Click (object sender, RoutedEventArgs e)
         {
             graPrzeciwkoKomputerowi = true;
-            Title = "Reversi - Gra z komputerem";
+            Title = "Reversi - Gra z komputerem - Grasz zielonym";
             przygotowaniePlanszyDoNowejGry(2);
             wykonajNajlepszyRuch();
         }
@@ -243,7 +237,7 @@ namespace Reversi
         private void MenuItem_NowaGraDla1Gracza_Click(object sender, RoutedEventArgs e)
         {
             graPrzeciwkoKomputerowi = true;
-            Title = "Reversi - Gra z komputerem";
+            Title = "Reversi - Gra z komputerem - Grasz brązowym";
             przygotowaniePlanszyDoNowejGry(1);
         }
         // Gra, Nowa gra dla dwóch graczy
@@ -308,16 +302,6 @@ namespace Reversi
                 wykonajNajlepszyRuch();
             else
               zaznaczNajlepszyRuch();
-        }
-
-        private void MenuItem_WybórKoloru1Gracz_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void MenuItem_WybórKoloru2Gracz_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
