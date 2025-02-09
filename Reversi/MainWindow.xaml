@@ -5,18 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Reversi"
         mc:Ignorable="d"
-        Title="Reversi" Height="450" Width="575" Background="PaleGreen" MinWidth="575" MinHeight="450" Icon="/reversiico.ico" WindowStyle="ThreeDBorderWindow">
+        Title="Reversi" Height="450" Width="575" Background="SlateGray" MinWidth="575" MinHeight="450" Icon="/reversiico.ico" WindowStyle="ThreeDBorderWindow">
     <DockPanel>
-        <Menu DockPanel.Dock="Top" Background="LightSeaGreen">
+        <Menu DockPanel.Dock="Top" >
             <MenuItem Header="Gra">
-                <MenuItem Header="Nowa gra - Rozpoczyna komputer (brązowy)"
+                <MenuItem Header="Nowa gra z komputerem">
+                    <MenuItem Header="Rozpoczyna komputer"
                         Click="MenuItem_NowaGraDla1Gracza_RozpoczynaKomputer_Click" />
-                <MenuItem Header="Nowa gra - Rozpoczynasz ty (zielony)"
+                    <MenuItem Header="Rozpoczynasz ty"
                         Click="MenuItem_NowaGraDla1Gracza_Click" />
+                </MenuItem>
                 <MenuItem Header="Nowa gra dla dwóch graczy"
                         Click="MenuItem_NowaGraDla2Graczy_Click" />
                 <Separator />
                 <MenuItem Header="Zamknij" Click="MenuItem_Zamknij_Click" />
+            </MenuItem>
+            <MenuItem Header="Ustawienia" IsEnabled="False">
+                <MenuItem Header="Zmień kolor gracza pierwszego"
+                        Click="MenuItem_WybórKoloru1Gracz_Click" />
+                <MenuItem Header="Zmień kolor gracza drugiego"
+                        Click="MenuItem_WybórKoloru2Gracz_Click" />
             </MenuItem>
             <MenuItem Header="Pomoc">
                 <MenuItem Header="Pokaż podpowiedź ruchu"
@@ -32,8 +40,12 @@
                 <MenuItem Header="O programie"
                               Click="MenuItem_Informacje_Click" />
             </MenuItem>
+            <Separator />
+            <MenuItem Header="Pokaż ostatni ruch"
+                      Click="MenuItem_RuchWykonanyPrzezPrzeciwnika_Click" 
+                      ToolTip="Podświetl ruch wykonany przez przeciwnika" FontSize="10" />
         </Menu>
-        <Grid Background="#DDFFDD">
+        <Grid Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="1*" />
@@ -46,20 +58,30 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="60" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="30" />
                     <RowDefinition Height="20" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Button x:Name="przyciskKolorGracza" Margin="10" Width="40" Height="40" Grid.Row="0" 
-                            Click="przyciskKolorGracza_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{DynamicResource ButtonStyle}"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" Foreground="Green"
-                            Text="Zielony: " FontWeight="Bold"><Run x:Name="liczbaPólZielony" Text="0" /></TextBlock>
-                <TextBlock Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" Foreground="Sienna"
-                            Text="Brązowy: " FontWeight="Bold"><Run x:Name="liczbaPólBrązowy" Text="0" /></TextBlock>
-                <ListBox x:Name="listaRuchówZielony" Grid.Column="0" Grid.Row="2"
+                <TextBlock Grid.Row="0" Margin="5" HorizontalAlignment="Center" Grid.ColumnSpan="2" Foreground="Black"
+                            Text="Aktywny gracz:"/>
+                <Button x:Name="przyciskKolorGracza" Margin="0,0,0,0" Width="40" Height="40" Grid.Row="1" ToolTip="Pokaż podpowieź ruchu" 
+                            Click="przyciskKolorGracza_Click" HorizontalAlignment="Center" Grid.ColumnSpan="2"  VerticalAlignment="Top" Style="{DynamicResource ButtonStyle}"/>
+                <TextBlock Grid.Row="2" Margin="5" HorizontalAlignment="Center" Foreground="Black"  Grid.ColumnSpan="2" 
+                            Text="Punktacja graczy:"/>
+                <TextBlock Grid.Row="3" Grid.Column="0"  HorizontalAlignment="Center" x:Name="napisPierwszy"
+                            Text="Pierwszy: ">
+                    <Run x:Name="liczbaPólZielony" Text="0" FontWeight="Bold"/>
+                </TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" x:Name="napisDrugi"
+                            Text="Drugi: " >
+                    <Run x:Name="liczbaPólBrązowy" Text="0" FontWeight="Bold"/>
+                </TextBlock>
+                <ListBox x:Name="listaRuchówZielony" Grid.Column="0" Grid.Row="4" Background="{DynamicResource {x:Static SystemColors.MenuBarBrushKey}}"
                             Margin="5,0,10,10" />
-                <ListBox x:Name="listaRuchówBrązowy" Grid.Column="1" Grid.Row="2"
-                            Margin="5,0,10,10" />
+                <ListBox x:Name="listaRuchówBrązowy" Grid.Column="1" Grid.Row="4" Background="{DynamicResource {x:Static SystemColors.MenuBarBrushKey}}"
+                    Margin="5,0,10,10" />
             </Grid>
         </Grid>
     </DockPanel>
