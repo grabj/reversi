@@ -26,8 +26,10 @@ namespace Reversi
         // Timer do opóźnienia ruchu komputera
         private DispatcherTimer timer;
         // Przypisanie kolorów do graczy
-        private SolidColorBrush[] kolory = { Brushes.Ivory, Brushes.Green, Brushes.Sienna };
-        string[] nazwyGraczy = { "", "zielony", "brązowy" };
+        static private SolidColorBrush kolorPierwszy = Brushes.RoyalBlue;
+        static private SolidColorBrush kolorDrugi = Brushes.Plum;
+        private SolidColorBrush[] kolory = { Brushes.Snow, kolorPierwszy, kolorDrugi };
+        string[] nazwyGraczy = { "", "Pierwszy", "Drugi" };
         // Pola na planszy
         private Button[,] plansza;
         private bool planszaZainicjowana
@@ -45,6 +47,8 @@ namespace Reversi
                     plansza[i, j].Content = silnik.PobierzStanPola(i, j).ToString();
                 }
             przyciskKolorGracza.Background = kolory[silnik.NumerGraczaWykonującegoNastępnyRuch];
+            napisPierwszy.Background = kolorPierwszy;
+            napisDrugi.Background = kolorDrugi;
             liczbaPólZielony.Text = silnik.LiczbaPólGracz1.ToString();
             liczbaPólBrązowy.Text = silnik.LiczbaPólGracz2.ToString();
         }
@@ -55,9 +59,9 @@ namespace Reversi
         WspółrzędnePola OstatniRuch;
         private static string symbolPola(int poziomo, int pionowo)
         {
-            if (poziomo > 25 || pionowo > 8)
+            if (poziomo > 8 || pionowo > 8)
                 return "(" + poziomo.ToString() + "," + pionowo.ToString() + ")";
-            return "" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[poziomo] + "123456789"[pionowo];
+            return "{" + "123456789"[poziomo] + ", " + "123456789"[pionowo] + "}";
         }
         void kliknięciePolaPlanszy(object sender, RoutedEventArgs e)
         {
@@ -190,10 +194,10 @@ namespace Reversi
         private void zaznaczNajlepszyRuch()
         {
             WspółrzędnePola? wspPola = ustalNajlepszyRuch();
-            if(wspPola.HasValue)
+            if (wspPola.HasValue)
             {
-                SolidColorBrush kolorPodpowiedzi = 
-                    kolory[silnik.NumerGraczaWykonującegoNastępnyRuch].Lerp(kolory[0]);
+                SolidColorBrush kolorPodpowiedzi =
+                    kolory[silnik.NumerGraczaWykonującegoNastępnyRuch].Lerp(kolory[0], 0.25);
                 plansza[wspPola.Value.Poziomo, wspPola.Value.Pionowo].Background = kolorPodpowiedzi;
             }
         }
@@ -203,13 +207,13 @@ namespace Reversi
             if (wspPola.HasValue && silnik.NumerGraczaWykonującegoNastępnyRuch == 1)
             {
                 SolidColorBrush kolorPodpowiedzi =
-                kolory[silnik.NumerGraczaWykonującegoNastępnyRuch + 1].Lerp(kolory[0]);
+                kolory[silnik.NumerGraczaWykonującegoNastępnyRuch + 1].Lerp(kolory[0], 0.5);
                 plansza[wspPola.Value.Poziomo, wspPola.Value.Pionowo].Background = kolorPodpowiedzi;
             }
             else if (wspPola.HasValue && silnik.NumerGraczaWykonującegoNastępnyRuch == 2)
             {
                 SolidColorBrush kolorPodpowiedzi =
-                kolory[silnik.NumerGraczaWykonującegoNastępnyRuch - 1].Lerp(kolory[0]);
+                kolory[silnik.NumerGraczaWykonującegoNastępnyRuch - 1].Lerp(kolory[0], 0.5);
                 plansza[wspPola.Value.Poziomo, wspPola.Value.Pionowo].Background = kolorPodpowiedzi;
             }
         }
@@ -218,7 +222,7 @@ namespace Reversi
             WspółrzędnePola? wspPola = ustalNajlepszyRuch();
             if (wspPola.HasValue)
             {
-                Button przycisk = 
+                Button przycisk =
                     plansza[wspPola.Value.Poziomo, wspPola.Value.Pionowo];
                 kliknięciePolaPlanszy(przycisk, null);
             }
@@ -226,25 +230,31 @@ namespace Reversi
 
         #region Metody zdarzeniowe menu głównego
         // Gra, Nowa gra dla jednego gracza, Rozpoczyna komputer (brązowy)
-        private void MenuItem_NowaGraDla1Gracza_RozpoczynaKomputer_Click (object sender, RoutedEventArgs e)
+        private void MenuItem_NowaGraDla1Gracza_RozpoczynaKomputer_Click(object sender, RoutedEventArgs e)
         {
             graPrzeciwkoKomputerowi = true;
-            Title = "Reversi - Gra z komputerem - Grasz zielonym";
+            Title = "Reversi - Gra z komputerem";
             przygotowaniePlanszyDoNowejGry(2);
-            wykonajNajlepszyRuch();
+            if (timer == null)
+            {
+                timer = new DispatcherTimer();
+                timer.Interval = new TimeSpan(0, 0, 0, 0, 1500);
+                timer.Tick += (_sender, _e) => { timer.IsEnabled = false; wykonajNajlepszyRuch(); };
+            }
+            timer.Start();
         }
         // Gra, Nowa gra dla jednego gracza, Rozpoczynasz Ty (zielony)
         private void MenuItem_NowaGraDla1Gracza_Click(object sender, RoutedEventArgs e)
         {
             graPrzeciwkoKomputerowi = true;
-            Title = "Reversi - Gra z komputerem - Grasz brązowym";
+            Title = "Reversi - Gra z komputerem";
             przygotowaniePlanszyDoNowejGry(1);
         }
         // Gra, Nowa gra dla dwóch graczy
         private void MenuItem_NowaGraDla2Graczy_Click(object sender, RoutedEventArgs e)
         {
             graPrzeciwkoKomputerowi = false;
-            Title = "Reversi - 2 graczy";
+            Title = "Reversi - Dwóch graczy";
             przygotowaniePlanszyDoNowejGry(1);
         }
         // Gra, zamknij
@@ -260,7 +270,7 @@ namespace Reversi
         //Pomoc, Ruch wykonany przez komputer
         private void MenuItem_RuchWykonanyPrzezPrzeciwnika_Click(object sender, RoutedEventArgs e)
         {
-            if(listaRuchówZielony.Items.Count + listaRuchówZielony.Items.Count > 0)
+            if (listaRuchówZielony.Items.Count + listaRuchówZielony.Items.Count > 0)
             {
                 zaznaczOstatniRuch();
             }
@@ -272,9 +282,7 @@ namespace Reversi
                 "W grze Reversi gracze zajmują na przemian pola planszy, przejmując przy tym wszystkie pola przeciwnika znajdujące się" +
                 "między nowo zajętym polem a innymi polami gracza wykonującego ruch. Celem gry jest zdobycie większej liczby pól niż przeciwnik.\n" +
                 "Gracze może zając jedynie takie pole, które pozwoli mu przejąć przynajmniej jedno pole przeciwnika. Jeżeli tekiego pola nie ma ,musi oddać ruch.\n" +
-                "Gra kończy się w momencie zajęcia wszystkich pól lub gdy żaden z graczy nie może wykonać ruchu.\n" +
-                "Naciśnij przycisk koloru gracza by uzyskać podpowiedź.\n" +
-                "Naciśnij przycisk koloru gracza trzymając przycisk CTRL, by wykonać najlepszy ruch.",
+                "Gra kończy się w momencie zajęcia wszystkich pól lub gdy żaden z graczy nie może wykonać ruchu.\n",
                 "Reversi - Zasady gry");
         }
         // Pomoc, Strategia komputera
@@ -292,16 +300,8 @@ namespace Reversi
         // Pomoc, O programie
         private void MenuItem_Informacje_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Reversi należy do gier strategicznych, które charakteryzują się szybkimi zmianami sytuacji i wyników. Gra wymaga myślenia perspektywicznego. Jest znana od końca XVIII wieku, zyskała popularność w połowie XIX wieku w Europie. Największy sukces Polaka na międzynarodowej arenie to zdobycie tytułu Mistrza Europy przez Miłosza Cupiała w 2009 roku.", "O aplikacji");
+            MessageBox.Show("App by Styśko, 2025.", "O aplikacji");
         }
         #endregion
-
-        private void przyciskKolorGracza_Click(object sender, RoutedEventArgs e)
-        {
-            if (Keyboard.Modifiers == ModifierKeys.Control)
-                wykonajNajlepszyRuch();
-            else
-              zaznaczNajlepszyRuch();
-        }
     }
 }

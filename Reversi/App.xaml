@@ -21,7 +21,7 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter TargetName="border" Property="BorderBrush" Value="#FF351F65" />
-                                <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                                <Setter TargetName="border" Property="BorderThickness" Value="4" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
