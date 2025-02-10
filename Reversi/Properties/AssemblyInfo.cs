@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("Reversi")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Eberspaecher")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Reversi")]
-[assembly: AssemblyCopyright("Copyright © Eberspaecher 2023")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -53,3 +53,4 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: NeutralResourcesLanguage("pl-PL")]
